@@ -1,3 +1,4 @@
+// importing all the necessary packages
 import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -11,15 +12,15 @@ import DialogContent from '@material-ui/core/DialogContent'
 import axios from 'axios';
 import './App.css';
 
-
+// export class to index.js
 export default class App extends React.Component {
 
   constructor(props) {
-    super(props);
+    super(props); // constructor
 
     this.state = {
-      date: this.getCurrentDate(),
-      value: 1,
+      date: this.getCurrentDate(), // default date
+      value: 1, // default currency value
       cache: [
         { "cc": "AED", "symbol": "\u062f.\u0625;", "name": "UAE dirham" },
         { "cc": "AFN", "symbol": "Afs", "name": "Afghan afghani" },
@@ -177,14 +178,16 @@ export default class App extends React.Component {
         { "cc": "ZAR", "symbol": "R", "name": "South African rand" },
         { "cc": "ZMK", "symbol": "ZK", "name": "Zambian kwacha" },
         { "cc": "ZWR", "symbol": "Z$", "name": "Zimbabwean dollar" }
-      ],
-      from: "HKD",
-      to: "USD",
-      result: 0.129028,
-      sig: 3,
-      open: false,
+      ], // currency list included in app.js to dispense repetitive requests for known data
+      from: "HKD", // default currency unit
+      to: "USD", // default currency unit to be exchanged
+      result: 0.129028, // default result  
+      sig: 3, // precision
+      open: false, // the status of result notification box
     };
   }
+
+// list of handlers
 
   onDateChange = (event) => {
     this.setState({
@@ -216,6 +219,8 @@ export default class App extends React.Component {
     });
   };
 
+// self-defined functions for data formatting
+
   abs(value) {
     return ((value >= 0) ? value : -value)
   }
@@ -237,6 +242,8 @@ export default class App extends React.Component {
     var today = false;
     var link = "";
 
+// data formatting and validation
+
     if (this.state.value <= 0) {
       allCorrect = false;
       alert("Request aborted. Please enter a positive number.");
@@ -256,12 +263,15 @@ export default class App extends React.Component {
     }
 
     if (allCorrect){
+      // going to backend
       axios.get(`/getRate/${link}`).then(response => { this.setState({ result: response.data.temp * this.state.value }) })
+      // allow result notification box to be displayed
       this.setState({ open: true });
     }
   };
 
   handleClose = () => {
+// not allow result notification box to be displayed
     this.setState({
       open: false,
     });
@@ -269,7 +279,7 @@ export default class App extends React.Component {
 
   render() {
     return (
-      <div class="primary-form">
+      <div class="primary-form"> // main interface
         <div>
 
           <React.Fragment>
@@ -316,7 +326,7 @@ export default class App extends React.Component {
 
           <br /> <br />
 
-          <Dialog onClose={this.handleClose} aria-labelledby="result" open={this.state.open}>
+          <Dialog onClose={this.handleClose} aria-labelledby="result" open={this.state.open}>  //result notification box
             <DialogTitle id="result">Result</DialogTitle>
             <DialogContent>
               You can get {this.state.result.toFixed(this.abs(this.state.sig))} {this.state.to} by converting {this.state.value} {this.state.from} to {this.state.to} on {this.state.date}. <br /> Press any area outside the dialog or the close button to dismiss it.<br /><br />
