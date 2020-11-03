@@ -8,6 +8,8 @@ const app = express();
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'client/build')));
 
+// Answering request from front end
+
 app.get("/getRate/:foo", (req, res) => {
     var intermediate = req.url.slice(9);
   
